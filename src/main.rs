@@ -21,7 +21,11 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "Auto-VAT-2",
         options,
-        Box::new(|_cc| Ok(Box::<MyApp>::default())),
+        Box::new(|cc| {
+            cc.egui_ctx.set_theme(egui::Theme::Dark);
+
+            Ok(Box::<MyApp>::default())
+        }),
     )
 }
 
