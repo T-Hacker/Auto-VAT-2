@@ -52,7 +52,7 @@ impl eframe::App for MyApp {
             );
 
             ui.with_layout(egui::Layout::bottom_up(Align::RIGHT), |ui| {
-                ui.heading(PURPLE_HEART);
+                ui.heading(RichText::new(PURPLE_HEART).color(Color32::PURPLE));
             });
         });
 
@@ -72,21 +72,6 @@ fn display_price_conversion(price: &str, ui: &mut egui::Ui) {
     if let Some(price) = parse_text(price) {
         let total_price = price * (1.0 + VAT_RATE);
 
-        // ui.with_layout(
-        //     egui::Layout::left_to_right(Align::Center).with_cross_align(Align::Center), // Center the content horizontally
-        //     |ui| {
-        //         // Trick so we don't have to add spaces in the text below:
-        //         let width = ui.fonts(|f| f.glyph_width(&TextStyle::Body.resolve(ui.style()), ' '));
-        //         ui.spacing_mut().item_spacing.x = width;
-        //
-        //         ui.heading(format!("{:.2}", price));
-        //         ui.heading(
-        //             RichText::new(format!(" ==+{}==> ", VAT_PERCENT)).color(Color32::YELLOW),
-        //         );
-        //         ui.heading(format!("{:.2}", total_price));
-        //     },
-        // );
-
         let number_text_format = TextFormat {
             font_id: FontId::new(32.0, FontFamily::Monospace),
             ..Default::default()
@@ -100,7 +85,11 @@ fn display_price_conversion(price: &str, ui: &mut egui::Ui) {
 
         let mut job = LayoutJob::default();
         job.append(&format!("{:.2}", price), 0.0, number_text_format.clone());
-        job.append(&format!(" ==+{}==> ", VAT_PERCENT), 0.0, arrow_text_format);
+        job.append(
+            &format!(" == +{}% ==> ", VAT_PERCENT),
+            0.0,
+            arrow_text_format,
+        );
         job.append(&format!("{:.2}", total_price), 0.0, number_text_format);
 
         ui.label(job);
